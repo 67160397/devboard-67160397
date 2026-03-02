@@ -1,4 +1,5 @@
 import Navbar from "./components/Navbar";
+import PostCard from "./components/PostCard";
 
 const POSTS = [
   {
@@ -33,6 +34,9 @@ function App() {
   return (
     <div>
       <Navbar />
+      <div style={{ padding: "2rem" }}>
+        <PostCard title="ทดสอบโพสต์" body="นี่คือเนื้อหาทดสอบ" />
+      </div>
     </div>
   );
 }
