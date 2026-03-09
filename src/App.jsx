@@ -3,27 +3,11 @@ import Navbar from "./components/Navbar";
 import PostList from "./components/PostList";
 import UserCard from "./components/UserCard";
 
-const POSTS = [
-  {
-    id: 1,
-    title: "React คืออะไร?",
-    body: "React เป็น library สำหรับสร้าง UI ที่ทำให้ code อ่านง่ายและดูแลรักษาได้",
-  },
-  {
-    id: 2,
-    title: "ทำไมต้องใช้ Components?",
-    body: "Components ช่วยให้เราแบ่ง UI ออกเป็นชิ้นเล็ก ๆ ที่ reuse ได้",
-  },
-  {
-    id: 3,
-    title: "JSX คืออะไร?",
-    body: "JSX คือ syntax ที่ช่วยให้เราเขียน HTML ใน JavaScript ได้อย่างสะดวก",
-  },
-  {
-    id: 4,
-    title: "Props ทำงานอย่างไร?",
-    body: "Props คือ argument ที่ส่งให้ component เหมือนกับการส่งพารามิเตอร์ให้ฟังก์ชัน",
-  },
+const INITIAL_POSTS = [
+  { id: 1, title: "React คืออะไร?", body: "React เป็น library สำหรับสร้าง UI..." },
+  { id: 2, title: "ทำไมต้องใช้ Components?", body: "ช่วยให้เราแบ่ง UI เป็นชิ้นเล็ก ๆ..." },
+  { id: 3, title: "JSX คืออะไร?", body: "ช่วยให้เราเขียน HTML ใน JavaScript..." },
+  { id: 4, title: "Props ทำงานอย่างไร?", body: "เป็น argument ที่ส่งให้ component..." },
 ];
 
 const USERS = [
@@ -33,12 +17,23 @@ const USERS = [
 ];
 
 function App() {
-  // 2. เพิ่ม state สำหรับ favorites (แม้ยังไม่ใช้ปุ่ม แต่ต้องมีส่งไปให้ PostList)
-  const [favorites, setFavorites] = useState([]); 
+  const [posts, setPosts] = useState(INITIAL_POSTS); //
+  const [favorites, setFavorites] = useState([]); // เก็บ id ที่ถูกใจ
+
+  // ฟังก์ชัน Toggle ถูกใจ/ยกเลิก (หัวใจสำคัญที่ทำให้กดได้จริง)
+  function handleToggleFavorite(postId) {
+    setFavorites((prev) =>
+      prev.includes(postId)
+        ? prev.filter((id) => id !== postId) // ถ้ามีอยู่แล้วให้ลบออก
+        : [...prev, postId] // ถ้ายังไม่มีให้เพิ่มเข้า
+    );
+  }
 
   return (
     <div>
-      <Navbar />
+      {/* 1. ส่ง favorites.length ไปให้ Navbar */}
+      <Navbar favoriteCount={favorites.length} />
+
       <div
         style={{
           maxWidth: "900px",
@@ -49,17 +44,15 @@ function App() {
           gap: "2rem",
         }}
       >
-        {/* คอลัมน์ซ้าย: โพสต์ */}
         <div>
-          {/* 3. แก้ไขตรงนี้: ส่ง favorites และ onToggleFavorite เข้าไป */}
-          <PostList 
-            posts={POSTS} 
-            favorites={favorites} 
-            onToggleFavorite={(id) => console.log("Toggle:", id)} 
+          {/* 2. ส่ง favorites และ handleToggleFavorite ไปให้ PostList */}
+          <PostList
+            posts={posts}
+            favorites={favorites}
+            onToggleFavorite={handleToggleFavorite}
           />
         </div>
 
-        {/* คอลัมน์ขวา: สมาชิก (คงเดิม) */}
         <div>
           <h2 style={{ color: "#2d3748", borderBottom: "2px solid #1e40af", paddingBottom: "0.5rem" }}>
             สมาชิก
@@ -74,4 +67,3 @@ function App() {
 }
 
 export default App;
-
