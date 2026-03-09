@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Navbar from "./components/Navbar";
 import PostList from "./components/PostList";
 import UserCard from "./components/UserCard";
@@ -32,6 +33,9 @@ const USERS = [
 ];
 
 function App() {
+  // 2. เพิ่ม state สำหรับ favorites (แม้ยังไม่ใช้ปุ่ม แต่ต้องมีส่งไปให้ PostList)
+  const [favorites, setFavorites] = useState([]); 
+
   return (
     <div>
       <Navbar />
@@ -47,18 +51,17 @@ function App() {
       >
         {/* คอลัมน์ซ้าย: โพสต์ */}
         <div>
-          <PostList posts={POSTS} />
+          {/* 3. แก้ไขตรงนี้: ส่ง favorites และ onToggleFavorite เข้าไป */}
+          <PostList 
+            posts={POSTS} 
+            favorites={favorites} 
+            onToggleFavorite={(id) => console.log("Toggle:", id)} 
+          />
         </div>
 
-        {/* คอลัมน์ขวา: สมาชิก */}
+        {/* คอลัมน์ขวา: สมาชิก (คงเดิม) */}
         <div>
-          <h2
-            style={{
-              color: "#2d3748",
-              borderBottom: "2px solid #1e40af",
-              paddingBottom: "0.5rem",
-            }}
-          >
+          <h2 style={{ color: "#2d3748", borderBottom: "2px solid #1e40af", paddingBottom: "0.5rem" }}>
             สมาชิก
           </h2>
           {USERS.map((user) => (
