@@ -1,13 +1,14 @@
 import { useState } from "react";
 import Navbar from "./components/Navbar";
+import AddPostForm from "./components/AddPostForm";
 import PostList from "./components/PostList";
 import UserCard from "./components/UserCard";
 
 const INITIAL_POSTS = [
-  { id: 1, title: "React คืออะไร?", body: "React เป็น library สำหรับสร้าง UI..." },
-  { id: 2, title: "ทำไมต้องใช้ Components?", body: "ช่วยให้เราแบ่ง UI เป็นชิ้นเล็ก ๆ..." },
-  { id: 3, title: "JSX คืออะไร?", body: "ช่วยให้เราเขียน HTML ใน JavaScript..." },
-  { id: 4, title: "Props ทำงานอย่างไร?", body: "เป็น argument ที่ส่งให้ component..." },
+  { id: 1, title: "React คืออะไร?", body: "React เป็น library สำหรับสร้าง UI ที่ทำให้ code อ่านง่ายและดูแลรักษาได้" },
+  { id: 2, title: "ทำไมต้องใช้ Components?", body: "Components ช่วยให้เราแบ่ง UI ออกเป็นชิ้นเล็ก ๆ ที่ reuse ได้" },
+  { id: 3, title: "JSX คืออะไร?", body: "JSX คือ syntax ที่ช่วยให้เราเขียน HTML ใน JavaScript ได้อย่างสะดวก" },
+  { id: 4, title: "Props ทำงานอย่างไร?", body: "Props คือ argument ที่ส่งให้ component เหมือนกับการส่งพารามิเตอร์ให้ฟังก์ชัน" },
 ];
 
 const USERS = [
@@ -17,21 +18,28 @@ const USERS = [
 ];
 
 function App() {
-  const [posts, setPosts] = useState(INITIAL_POSTS); //
-  const [favorites, setFavorites] = useState([]); // เก็บ id ที่ถูกใจ
+  const [posts, setPosts] = useState(INITIAL_POSTS);
+  const [favorites, setFavorites] = useState([]);
 
-  // ฟังก์ชัน Toggle ถูกใจ/ยกเลิก (หัวใจสำคัญที่ทำให้กดได้จริง)
+  function handleAddPost({ title, body }) {
+    const newPost = {
+      id: Date.now(), 
+      title,
+      body,
+    };
+    setPosts((prev) => [newPost, ...prev]); 
+  }
+
   function handleToggleFavorite(postId) {
     setFavorites((prev) =>
       prev.includes(postId)
-        ? prev.filter((id) => id !== postId) // ถ้ามีอยู่แล้วให้ลบออก
-        : [...prev, postId] // ถ้ายังไม่มีให้เพิ่มเข้า
+        ? prev.filter((id) => id !== postId)
+        : [...prev, postId]
     );
   }
 
   return (
     <div>
-      {/* 1. ส่ง favorites.length ไปให้ Navbar */}
       <Navbar favoriteCount={favorites.length} />
 
       <div
@@ -45,7 +53,8 @@ function App() {
         }}
       >
         <div>
-          {/* 2. ส่ง favorites และ handleToggleFavorite ไปให้ PostList */}
+          <AddPostForm onAddPost={handleAddPost} />
+          
           <PostList
             posts={posts}
             favorites={favorites}
