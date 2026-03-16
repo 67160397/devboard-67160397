@@ -1,8 +1,8 @@
 import { useState } from "react";
 import Navbar from "./components/Navbar";
-import AddPostForm from "./components/AddPostForm";
 import PostList from "./components/PostList";
-import UserCard from "./components/UserCard";
+import UserList from "./components/UserList";
+import AddPostForm from "./components/AddPostForm";
 
 const INITIAL_POSTS = [
   { id: 1, title: "React คืออะไร?", body: "React เป็น library สำหรับสร้าง UI ที่ทำให้ code อ่านง่ายและดูแลรักษาได้" },
@@ -18,18 +18,15 @@ const USERS = [
 ];
 
 function App() {
-  const [posts, setPosts] = useState(INITIAL_POSTS);
   const [favorites, setFavorites] = useState([]);
 
+  // ฟังก์ชันจัดการเพิ่มโพสต์ (ในสัปดาห์นี้จะยังไม่เชื่อมกับ API ของ PostList 
+  // ให้เขียนเตรียมไว้ก่อนตามคู่มือครับ)
   function handleAddPost({ title, body }) {
-    const newPost = {
-      id: Date.now(), 
-      title,
-      body,
-    };
-    setPosts((prev) => [newPost, ...prev]); 
+    console.log("Add Post:", { title, body });
   }
 
+  // ฟังก์ชัน Toggle ถูกใจ
   function handleToggleFavorite(postId) {
     setFavorites((prev) =>
       prev.includes(postId)
@@ -40,6 +37,7 @@ function App() {
 
   return (
     <div>
+      {/* ส่งจำนวน favorites ไปแสดงที่ Navbar */}
       <Navbar favoriteCount={favorites.length} />
 
       <div
@@ -52,23 +50,19 @@ function App() {
           gap: "2rem",
         }}
       >
+        {/* คอลัมน์ซ้าย: ฟอร์มเพิ่มโพสต์ และรายการโพสต์จาก API */}
         <div>
           <AddPostForm onAddPost={handleAddPost} />
           
           <PostList
-            posts={posts}
             favorites={favorites}
             onToggleFavorite={handleToggleFavorite}
           />
         </div>
 
+        {/* คอลัมน์ขวา: รายชื่อสมาชิกจาก API */}
         <div>
-          <h2 style={{ color: "#2d3748", borderBottom: "2px solid #1e40af", paddingBottom: "0.5rem" }}>
-            สมาชิก
-          </h2>
-          {USERS.map((user) => (
-            <UserCard key={user.id} name={user.name} email={user.email} />
-          ))}
+          <UserList />
         </div>
       </div>
     </div>
