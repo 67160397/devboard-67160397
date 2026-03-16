@@ -1,4 +1,10 @@
-function PostCard({ title, body, isFavorite, onToggleFavorite }) {
+import { useState } from "react";
+import CommentList from "./CommentList";
+
+function PostCard({ post, isFavorite, onToggleFavorite }) {
+  // สร้าง State สำหรับเปิด-ปิดการแสดงความคิดเห็น (เริ่มต้นเป็น false คือซ่อนไว้)
+  const [showComments, setShowComments] = useState(false);
+
   return (
     <div
       style={{
@@ -7,34 +13,48 @@ function PostCard({ title, body, isFavorite, onToggleFavorite }) {
         padding: "1rem",
         marginBottom: "1rem",
         background: "white",
-        position: "relative" // เพิ่มเพื่อให้จัดตำแหน่งปุ่มได้ง่ายขึ้น
       }}
     >
-      <h3 style={{ margin: "0 0 0.5rem", color: "#1e40af" }}>{title}</h3>
-      <p style={{ margin: "0 0 1rem", color: "#4a5568", lineHeight: 1.6 }}>
-        {body}
+      <h3 style={{ margin: "0 0 0.5rem", color: "#1e40af" }}>{post.title}</h3>
+      <p style={{ margin: "0 0 0.75rem", color: "#4a5568", lineHeight: 1.6 }}>
+        {post.body}
       </p>
 
-      {/* ปุ่มถูกใจ */}
-      <button
-        onClick={onToggleFavorite}
-        style={{
-          background: "none",
-          border: "1px solid " + (isFavorite ? "#e53e3e" : "#cbd5e0"),
-          cursor: "pointer",
-          fontSize: "0.9rem",
-          padding: "0.4rem 0.8rem",
-          borderRadius: "20px",
-          color: isFavorite ? "#e53e3e" : "#718096",
-          display: "flex",
-          alignItems: "center",
-          gap: "0.5rem",
-          transition: "all 0.2s"
-        }}
-      >
-        <span>{isFavorite ? "❤️" : "🤍"}</span>
-        {isFavorite ? "ถูกใจแล้ว" : "ถูกใจ"}
-      </button>
+      <div style={{ display: "flex", gap: "0.5rem" }}>
+        <button
+          onClick={onToggleFavorite}
+          style={{
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            fontSize: "1rem",
+            padding: "0.25rem 0.5rem",
+            borderRadius: "4px",
+            color: isFavorite ? "#e53e3e" : "#a0aec0",
+          }}
+        >
+          {isFavorite ? "❤️ ถูกใจแล้ว" : "🤍 ถูกใจ"}
+        </button>
+
+        {/* ปุ่มดูความคิดเห็น (เพิ่มใหม่) */}
+        <button
+          onClick={() => setShowComments((prev) => !prev)}
+          style={{
+            background: "none",
+            border: "1px solid #e2e8f0",
+            cursor: "pointer",
+            fontSize: "0.9rem",
+            padding: "0.25rem 0.75rem",
+            borderRadius: "4px",
+            color: "#4a5568",
+          }}
+        >
+          {showComments ? "▲ ซ่อน" : "▼ ดูความคิดเห็น"}
+        </button>
+      </div>
+
+      {/* เงื่อนไข: ถ้า showComments เป็น true ให้แสดง CommentList */}
+      {showComments && <CommentList postId={post.id} />}
     </div>
   );
 }
