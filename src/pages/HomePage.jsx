@@ -22,9 +22,9 @@ function HomePage() {
       {/* แสดงโพสต์ใหม่ที่เพิ่มเอง (ถ้ามี) */}
       {localPosts.map(post => (
         <div key={post.id} style={{ border: '2px solid #1e40af', borderRadius: '8px', padding: '1rem', marginBottom: '1rem', background: '#eff6ff' }}>
-          <span style={{ color: '#1e40af', fontWeight: 'bold' }}>[โพสต์ใหม่ของคุณ]</span>
-          <h3>{post.title}</h3>
-          <p>{post.body}</p>
+          <span style={{ color: 'rgb(30, 64, 175)', fontWeight: 'bold' }}>[โพสต์ใหม่ของคุณ]</span>
+          <h3 style={{ color: 'rgb(30, 64, 175)', margin: '0.5rem 0' }}>{post.title}</h3>
+          <p style={{ color: '#4a5568', margin: 0 }}>{post.body}</p>
         </div>
       ))}
 
